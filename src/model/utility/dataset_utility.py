@@ -1,7 +1,7 @@
 import os
 import glob
 import numpy as np
-from scipy import misc
+from PIL import Image
 
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -19,7 +19,7 @@ class dataset(Dataset):
         self.file_names = [f for f in glob.glob(os.path.join(root_dir, "*", "*.npz")) \
                             if dataset_type in f]
         self.img_size = img_size
-        self.embeddings = np.load(os.path.join(root_dir, 'embedding.npy'), allow_pickle=True)
+        self.embeddings = np.load(os.path.join(root_dir, 'embedding.npy'), allow_pickle=True, encoding='latin1')
         self.shuffle = shuffle
 
     def __len__(self):
@@ -45,8 +45,11 @@ class dataset(Dataset):
             target = new_target
         
         resize_image = []
-        for idx in range(0, 16):
-            resize_image.append(misc.imresize(image[idx,:,:], (self.img_size, self.img_size)))
+        for frame_index in range(0, 16):
+            # Convert numpy array to PIL Image, resize, and convert back to numpy
+            pil_image = Image.fromarray(image[frame_index, :, :])
+            resized_pil = pil_image.resize((self.img_size, self.img_size), Image.LANCZOS)
+            resize_image.append(np.array(resized_pil))
         resize_image = np.stack(resize_image)
         # image = resize(image, (16, 128, 128))
         # meta_matrix = data["mata_matrix"]

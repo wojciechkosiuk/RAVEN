@@ -155,7 +155,7 @@ def fuse(args, all_configs):
             f.write(dom)
         if target == predicted:
             acc += 1
-    print "Accuracy: {}".format(float(acc) / (args.num_samples * len(all_configs)))
+    print("Accuracy: {}".format(float(acc) / (args.num_samples * len(all_configs))))
 
 
 def separate(args, all_configs):
@@ -284,7 +284,7 @@ def separate(args, all_configs):
             
             if target == predicted:
                 acc += 1
-        print "Accuracy of {}: {}".format(key, float(acc) / args.num_samples)
+        print("Accuracy of {}: {}".format(key, float(acc) / args.num_samples))
 
 
 def main():
